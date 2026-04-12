@@ -1,4 +1,4 @@
-# 路由配置示例 —— 你可以使用此文件，也可以自行设计配置格式
+# Example route configuration — you may use this file or design your own config format
 routes:
   - path: /api/users/**
     target: http://localhost:8081

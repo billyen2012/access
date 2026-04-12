@@ -1,30 +1,30 @@
-# API Gateway 编程面试
+# API Gateway Coding Interview
 
-## 背景
+## Overview
 
-你将在 **40 分钟** 内，借助 AI 工具设计并实现一个轻量级 API Gateway 的核心功能。
+You have **40 minutes** to design and implement the core functionality of a lightweight API Gateway using AI tools.
 
-你可以使用任何 AI 编码工具（Claude Code / Cursor / Copilot / 其他均可），技术栈不限（Go / Node.js / Python / Rust / Java 等均可）。
+You may use any AI coding tool (Claude Code / Cursor / Copilot / etc.) and any tech stack (Go / Node.js / Python / Rust / Java / etc.).
 
 ---
 
-## 环境说明
+## Environment
 
-本项目已提供 **3 个后端微服务**，通过 Docker Compose 一键启动：
+This project provides **3 backend microservices**, ready to launch with Docker Compose:
 
 ```bash
 docker compose up --build
 ```
 
-启动后可用的后端服务：
+Available backend services after startup:
 
-| 服务 | 地址 | 说明 |
-|------|------|------|
-| user-service | `http://localhost:8081` | 用户服务，返回用户列表 |
-| order-service | `http://localhost:8082` | 订单服务，返回订单列表 |
-| product-service | `http://localhost:8083` | 商品服务，返回商品列表 |
+| Service | Address | Description |
+|---------|---------|-------------|
+| user-service | `http://localhost:8081` | Returns a list of users |
+| order-service | `http://localhost:8082` | Returns a list of orders |
+| product-service | `http://localhost:8083` | Returns a list of products |
 
-你可以用 curl 验证服务是否正常：
+Verify the services are running:
 
 ```bash
 curl http://localhost:8081/
@@ -32,86 +32,86 @@ curl http://localhost:8082/
 curl http://localhost:8083/
 ```
 
-每个服务还提供 `/health` 端点用于健康检查。
+Each service also exposes a `/health` endpoint for health checks.
 
 ---
 
-## 你的任务
+## Your Task
 
-在 `gateway/` 目录下实现一个 API Gateway，对外监听一个统一端口（建议 `8080`），将请求按路由规则转发到上述后端服务。
+Implement an API Gateway in the `gateway/` directory. The gateway should listen on a single port (recommended `8080`) and forward requests to the appropriate backend service based on routing rules.
 
-### 必做功能（MVP）
+### Required Features (MVP)
 
-1. **路由转发** — 根据请求路径将流量转发到对应的后端服务
+1. **Request Routing** — Forward traffic to the correct backend based on request path
    - `GET /api/users/**` → `http://localhost:8081`
    - `GET /api/orders/**` → `http://localhost:8082`
    - `GET /api/products/**` → `http://localhost:8083`
 
-2. **中间件 / 插件机制** — 设计一个可扩展的中间件管道，让新功能可以通过"添加中间件"的方式接入，而不是修改核心转发逻辑
+2. **Middleware / Plugin Pipeline** — Design an extensible middleware pipeline so that new features can be added by plugging in a middleware, rather than modifying the core routing logic
 
-3. **至少实现一个中间件**（从以下任选）：
-   - 请求日志（记录方法、路径、耗时、状态码）
-   - 简单鉴权（如 header 中的 API Key 校验）
-   - 限流（如固定窗口/令牌桶）
+3. **At least one middleware** (choose from the following):
+   - Request logging (method, path, latency, status code)
+   - Simple authentication (e.g. API Key validation via header)
+   - Rate limiting (e.g. fixed window / token bucket)
 
-### 选做功能（加分项）
+### Optional Features (Bonus)
 
-- 路由配置外部化（从文件/环境变量加载，参考项目根目录的 `routes.yml`）
-- 熔断器（后端不可用时快速失败）
-- 请求/响应改写（添加 header、修改 body 等）
-- 更多中间件
-- 负载均衡
+- Externalized route configuration (load from file / env vars — see `routes.yml` in the project root)
+- Circuit breaker (fail fast when a backend is unavailable)
+- Request / response rewriting (add headers, modify body, etc.)
+- Additional middlewares
+- Load balancing
 
 ---
 
-## 交付要求
+## Deliverables
 
-- 代码可运行
-- 能用 curl 演示核心流程，例如：
+- Working, runnable code
+- Demonstrate the core flow with curl, for example:
   ```bash
-  # 通过 gateway 访问用户服务
+  # Access user service through the gateway
   curl http://localhost:8080/api/users/
 
-  # 通过 gateway 访问订单服务
+  # Access order service through the gateway
   curl http://localhost:8080/api/orders/
 
-  # 验证中间件生效（如鉴权被拒绝）
-  curl -i http://localhost:8080/api/users/  # 无 API Key → 401
-  curl -H "X-API-Key: secret" http://localhost:8080/api/users/  # 有 Key → 200
+  # Verify middleware works (e.g. auth rejection)
+  curl -i http://localhost:8080/api/users/          # No API Key → 401
+  curl -H "X-API-Key: secret" http://localhost:8080/api/users/  # With Key → 200
   ```
-- 能清晰解释你的架构设计决策
+- Be prepared to clearly explain your architectural decisions
 
 ---
 
-## 时间分配建议
+## Suggested Time Allocation
 
-| 阶段 | 时间 | 内容 |
-|------|------|------|
-| 需求理解 & 设计 | ~8 min | 阅读本文档，构思架构，与面试官对齐方案 |
-| AI 协作实现 | ~22 min | 在 `gateway/` 目录下编码实现 |
-| 演示 & 答辩 | ~10 min | curl 演示 + 面试官提问 |
-
----
-
-## 注意事项
-
-- **不要修改** `services/` 目录下的后端服务代码
-- 所有你的代码都应该写在 `gateway/` 目录下
-- 完成后请将你的代码提交为一个 PR
-- 面试过程中面试官会全程观察你的屏幕，重点关注你**如何与 AI 协作**，而不仅仅是最终结果
+| Phase | Time | Activity |
+|-------|------|----------|
+| Understand requirements & design | ~8 min | Read this document, plan your architecture, align with the interviewer |
+| Implement with AI | ~22 min | Code your solution in the `gateway/` directory |
+| Demo & Q&A | ~10 min | curl demo + interviewer questions |
 
 ---
 
-## 项目结构
+## Important Notes
+
+- **Do NOT modify** any code under the `services/` directory
+- All your code should be written in the `gateway/` directory
+- Submit your code as a Pull Request when finished
+- The interviewer will observe your screen throughout — the focus is on **how you collaborate with AI**, not just the final result
+
+---
+
+## Project Structure
 
 ```
 .
-├── README.md              ← 你正在读的文件
-├── routes.yml             ← 路由配置示例（可选使用）
-├── docker-compose.yml     ← 一键启动后端服务
+├── README.md              ← You are here
+├── routes.yml             ← Example route config (optional)
+├── docker-compose.yml     ← One-click backend startup
 ├── services/
-│   ├── user-service/      ← 用户服务 (:8081)
-│   ├── order-service/     ← 订单服务 (:8082)
-│   └── product-service/   ← 商品服务 (:8083)
-└── gateway/               ← 你的工作目录（当前为空）
+│   ├── user-service/      ← User service (:8081)
+│   ├── order-service/     ← Order service (:8082)
+│   └── product-service/   ← Product service (:8083)
+└── gateway/               ← Your working directory (currently empty)
 ```
