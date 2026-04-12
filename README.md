@@ -80,7 +80,6 @@ This is the **minimum requirement**. Think about what a production-grade API Gat
 ```
 .
 ├── README.md              ← You are here
-├── routes.yml             ← Example route config (optional)
 ├── docker-compose.yml     ← One-click backend startup
 ├── services/
 │   ├── user-service/      ← User service (:8081)
